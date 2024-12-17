@@ -27,8 +27,11 @@ config.window_background_gradient = {
 }
 
 
+local onedark_dark_bg = "#282c34";
 
 local schemes = {}
+
+-- Rick and Morty
 table.insert(
   schemes,
   {
@@ -38,30 +41,14 @@ table.insert(
         },
         vertical_align = "Bottom",
         horizontal_align = "Right",
-        -- height = width*0,87
-        repeat_x = "NoRepeat",
-        repeat_y = "NoRepeat",
-	opacity = 0.5;
-    },
-  }
-);
-table.insert(
-  schemes,
-  {
-    background = {
-        source = {
-            File = wezterm.config_dir .. "/backgrounds/2.png",
-        },
-        vertical_align = "Bottom",
-        horizontal_align = "Right",
-        -- height = width*0,87
+        -- height = width*1.372
         width = "550", 
-        height = "478.5",
+        height = "754.6",
         repeat_x = "NoRepeat",
         repeat_y = "NoRepeat",
     },
     window_background_gradient = {
-        colors = {"black"},
+        colors = {onedark_dark_bg},
         blend = "Oklab",
         orientation = {
             Radial = {
@@ -74,6 +61,37 @@ table.insert(
   }
 );
 
+-- DEATH STAR
+table.insert(
+  schemes,
+  {
+    background = {
+        source = {
+            File = wezterm.config_dir .. "/backgrounds/2.png",
+        },
+        vertical_align = "Bottom",
+        horizontal_align = "Right",
+        -- height = width*0,931
+        width = "550", 
+        height = "512",
+        repeat_x = "NoRepeat",
+        repeat_y = "NoRepeat",
+    },
+    window_background_gradient = {
+        colors = {onedark_dark_bg},
+        blend = "Oklab",
+        orientation = {
+            Radial = {
+                cx = 0.8,
+                cy = 0.8,
+                radius = 1.2,
+            }
+        },
+    }
+  }
+);
+
+-- Millennium Falcon
 table.insert(
   schemes,
   {
@@ -83,14 +101,14 @@ table.insert(
         },
         vertical_align = "Bottom",
         horizontal_align = "Right",
-        -- height = width*0,87
+        -- height = width*0.53
         width = "550", 
-        height = "478.5",
+        height = "291.5",
         repeat_x = "NoRepeat",
-        repeat_y = "NoRepeat",
+        repeat_y = "NoRepeat"
     },
     window_background_gradient = {
-        colors = {"hsl(0,0%,14.51%)"},
+        colors = {onedark_dark_bg},
         blend = "Oklab",
         orientation = {
             Radial = {
@@ -111,16 +129,16 @@ table.insert(
         source = {
             File = wezterm.config_dir .. "/backgrounds/4.png",
         },
-        vertical_align = "Top",
+        vertical_align = "Bottom",
         horizontal_align = "Right",
-        -- height = width*0,87
+        -- height = width*1.572
         width = "500", 
-        height = "478.5",
+        height = "786",
         repeat_x = "NoRepeat",
         repeat_y = "NoRepeat",
     },
     window_background_gradient = {
-        colors = {"hsl(0,0%,14.51%)"},
+        colors = {onedark_dark_bg},
         blend = "Oklab",
         orientation = {
             Radial = {
@@ -143,14 +161,14 @@ table.insert(
         },
         vertical_align = "Bottom",
         horizontal_align = "Right",
-        -- height = width*1.33
+        -- height = width*1.551
         width = "380", 
-        height = "505",
+        height = "589",
         repeat_x = "NoRepeat",
         repeat_y = "NoRepeat",
     },
     window_background_gradient = {
-        colors = {"black"},
+        colors = {onedark_dark_bg},
         blend = "Oklab",
         orientation = {
             Radial = {
@@ -164,7 +182,7 @@ table.insert(
 );
 
 
--- 3PO
+-- ArmaHEADon
 table.insert(
   schemes,
   {
@@ -174,14 +192,14 @@ table.insert(
         },
         vertical_align = "Bottom",
         horizontal_align = "Right",
-        -- height = width*1.25
-        width = "400", 
-        height = "500",
+        -- height = width*1.515
+        width = "350", 
+        height = "550",
         repeat_x = "NoRepeat",
         repeat_y = "NoRepeat",
     },
     window_background_gradient = {
-        colors = {"black"},
+        colors = {onedark_dark_bg},
         blend = "Oklab",
         orientation = {
             Radial = {
@@ -204,14 +222,14 @@ table.insert(
         },
         vertical_align = "Bottom",
         horizontal_align = "Right",
-        -- height = width*1.235
+        -- height = width*1.5
         width = "380", 
-        height = "469",
+        height = "570",
         repeat_x = "NoRepeat",
         repeat_y = "NoRepeat",
     },
     window_background_gradient = {
-        colors = {"black"},
+        colors = {onedark_dark_bg},
         blend = "Oklab",
         orientation = {
             Radial = {
@@ -223,8 +241,8 @@ table.insert(
     }
   }
 );
---
--- Gary 
+
+-- R2D2 & C-3PO
 table.insert(
   schemes,
   {
@@ -232,16 +250,21 @@ table.insert(
         source = {
             File = wezterm.config_dir .. "/backgrounds/8.png",
         },
+        vertical_align = "Bottom",
+        horizontal_align = "Right",
+        -- height = width*1.597
+        width = "380", 
+        height = "607",
         repeat_x = "NoRepeat",
         repeat_y = "NoRepeat",
     },
     window_background_gradient = {
-        colors = {"black"},
+        colors = {onedark_dark_bg},
         blend = "Oklab",
         orientation = {
             Radial = {
-                cx = 0.9,
-                cy = 0.9,
+                cx = 0.8,
+                cy = 0.8,
                 radius = 1.2,
             }
         },
@@ -249,25 +272,29 @@ table.insert(
   }
 );
 
--- Avocato
+-- Rey
 table.insert(
   schemes,
   {
     background = {
         source = {
-            File = wezterm.config_dir .. "/backgrounds/9.jpg",
+            File = wezterm.config_dir .. "/backgrounds/9.png",
         },
+        vertical_align = "Bottom",
+        horizontal_align = "Right",
+        -- height = width*1.30
+        width = "550", 
+        height = "715",
         repeat_x = "NoRepeat",
         repeat_y = "NoRepeat",
-        opacity = 0.6,
     },
     window_background_gradient = {
-        colors = {"black"},
+        colors = {onedark_dark_bg},
         blend = "Oklab",
         orientation = {
             Radial = {
-                cx = 0.3,
-                cy = 0.3,
+                cx = 0.8,
+                cy = 0.8,
                 radius = 1.2,
             }
         },
@@ -275,6 +302,35 @@ table.insert(
   }
 );
 
+-- Kylo Ren
+table.insert(
+  schemes,
+  {
+    background = {
+        source = {
+            File = wezterm.config_dir .. "/backgrounds/10.png",
+        },
+        vertical_align = "Bottom",
+        horizontal_align = "Right",
+        -- height = width*1.116
+        width = "550", 
+        height = "613.8",
+        repeat_x = "NoRepeat",
+        repeat_y = "NoRepeat",
+    },
+    window_background_gradient = {
+        colors = {onedark_dark_bg},
+        blend = "Oklab",
+        orientation = {
+            Radial = {
+                cx = 0.8,
+                cy = 0.8,
+                radius = 1.2,
+            }
+        },
+    }
+  }
+);
 
 -- Key bindings; a bit messy but pretty useful.
 -- + Some of them link to tmux actions such as navigation. Example: 

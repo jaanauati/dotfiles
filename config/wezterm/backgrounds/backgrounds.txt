@@ -1,0 +1,10 @@
+1.png: Rick and Morty
+2.png: Death Star
+3.png: Millennium Falcon
+4.png: Pickle Rick.
+5.png: BB8.
+6.png: armaHEADon
+7.png: R2
+8.png: R2D2 & C-3PO
+9.png: Rey
+10.png: Kylo

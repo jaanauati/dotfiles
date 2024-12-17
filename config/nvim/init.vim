@@ -3,7 +3,7 @@ Plug 'editorconfig/editorconfig-vim'
 
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
-Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive' 
 Plug 'shumphrey/fugitive-gitlab.vim'
 
 Plug 'easymotion/vim-easymotion'
@@ -43,9 +43,6 @@ Plug 'MattesGroeger/vim-bookmarks'
 Plug 'nvim-lualine/lualine.nvim'
 " If you want to have icons in your statusline choose one of these
 Plug 'nvim-tree/nvim-web-devicons'
-
-Plug 'axkirillov/telescope-changed-files', {'branch': 'main'}
-
 Plug 'navarasu/onedark.nvim'
 call plug#end()
 
@@ -308,8 +305,8 @@ let g:which_key_map['c']={
 
 let g:which_key_map['d']={
       \ 'name' : 'Dev & whatnot',
-      \ 'l' : [':!npx eslint % --fix; :e!', 'Lint current file'],
-      \ 'c' : [':!git checkout %; :e!', 'Git checkout current file'],
+      \ 'l' : [':!npx eslint % --fix', 'Lint current file'],
+      \ 'c' : [':!git checkout %', 'Git checkout current file'],
       \ 'j' : [':!npx jest %', 'Jest test current file']
       \ }
 
@@ -348,6 +345,9 @@ let g:onedark_config = {
 \}
 colorscheme onedark
 
+" disable folding in telescope's result window
+autocmd! FileType TelescopeResults setlocal nofoldenable
+
 lua << EOF
 require'neogit'.setup()
 require'telescope'.setup({
@@ -377,8 +377,7 @@ require'nvim-treesitter.configs'.setup {
 require'gitsigns'.setup()
 require'nvim-tree'.setup()
 
---require('neogit').setup {}
-require('lualine').setup {
+require('lualine').setup({
   options = {
     icons_enabled = true,
     theme = 'auto',
@@ -417,8 +416,8 @@ require('lualine').setup {
   winbar = {},
   inactive_winbar = {},
   extensions = {}
-}
-require('telescope').load_extension('changed_files')
+})
+
 require("oil").setup()
 EOF
 
