@@ -1,10 +1,25 @@
 -- Pull in the wezterm API
 local wezterm = require 'wezterm'
 
+local workspace_switcher = wezterm.plugin.require("https://github.com/MLFlexer/smart_workspace_switcher.wezterm")
+
+local session_manager = require("wezterm-session-manager/session-manager")
+wezterm.on("save_session", function(window) session_manager.save_state(window) end)
+wezterm.on("load_session", function(window) session_manager.load_state(window) end)
+wezterm.on("restore_session", function(window) session_manager.restore_state(window) end)
+
+
 -- This will hold the configuration.
 local config = wezterm.config_builder()
 
-config.max_fps = 240;
+
+-- Session management.
+config.unix_domains = {
+  {
+    name = "unix";
+  },
+}
+
 config.max_fps = 241;
 
 -- For example, changing the color scheme:
@@ -507,4 +522,7 @@ config.keys = {
   },
 }
 
+workspace_switcher.apply_to_config(config)
+
 return config
+
