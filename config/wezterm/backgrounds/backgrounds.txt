@@ -8,3 +8,5 @@
 8.png: R2D2 & C-3PO
 9.png: Rey
 10.png: Kylo
+11.png: Mooncake
+12.png: Avocato

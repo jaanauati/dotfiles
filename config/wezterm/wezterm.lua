@@ -5,6 +5,7 @@ local wezterm = require 'wezterm'
 local config = wezterm.config_builder()
 
 config.max_fps = 240;
+config.max_fps = 241;
 
 -- For example, changing the color scheme:
 config.color_scheme = 'AdventureTime'
@@ -69,7 +70,7 @@ table.insert(
         source = {
             File = wezterm.config_dir .. "/backgrounds/2.png",
         },
-        vertical_align = "Bottom",
+        vertical_align = "Middle",
         horizontal_align = "Right",
         -- height = width*0,931
         width = "550", 
@@ -332,6 +333,65 @@ table.insert(
   }
 );
 
+-- Mooncake
+table.insert(
+  schemes,
+  {
+    background = {
+        source = {
+            File = wezterm.config_dir .. "/backgrounds/11.png",
+        },
+        vertical_align = "Middle",
+        horizontal_align = "Right",
+        -- height = width*1.056
+        width = "500", 
+        height = "528",
+        repeat_x = "NoRepeat",
+        repeat_y = "NoRepeat",
+    },
+    window_background_gradient = {
+        colors = {onedark_dark_bg},
+        blend = "Oklab",
+        orientation = {
+            Radial = {
+                cx = 0.8,
+                cy = 0.8,
+                radius = 1.2,
+            }
+        },
+    }
+  }
+);
+
+-- Avocato
+table.insert(
+  schemes,
+  {
+    background = {
+        source = {
+            File = wezterm.config_dir .. "/backgrounds/12.png",
+        },
+        vertical_align = "Bottom",
+        horizontal_align = "Right",
+        -- height = width*2.062
+        width = "300", 
+        height = "618",
+        repeat_x = "NoRepeat",
+        repeat_y = "NoRepeat",
+    },
+    window_background_gradient = {
+        colors = {onedark_dark_bg},
+        blend = "Oklab",
+        orientation = {
+            Radial = {
+                cx = 0.8,
+                cy = 0.8,
+                radius = 1.2,
+            }
+        },
+    }
+  }
+);
 -- Key bindings; a bit messy but pretty useful.
 -- + Some of them link to tmux actions such as navigation. Example: 
 --   "CMD+s" links to "<ctrl+a>e" (where ctrl+a is my tmux <leader>), which
@@ -342,6 +402,7 @@ table.insert(
 --    "CocSearch" command.
 -- + There are also some bindings for switching terminal backgrounds
 --    (list of images under "backgrounds" directory).
+config.leader = { key = 'a', mods = 'CMD', timeout_milliseconds = 1000 }
 config.keys = {
   {
     key = 's',
