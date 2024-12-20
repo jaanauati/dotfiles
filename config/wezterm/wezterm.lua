@@ -4,7 +4,9 @@ local wezterm = require 'wezterm'
 local workspace_switcher = wezterm.plugin.require("https://github.com/MLFlexer/smart_workspace_switcher.wezterm")
 
 local session_manager = require("wezterm-session-manager/session-manager")
-wezterm.on("save_session", function(window) session_manager.save_state(window) end)
+wezterm.on("save_session", function(window) 
+  session_manager.save_state(window)
+end)
 wezterm.on("load_session", function(window) session_manager.load_state(window) end)
 wezterm.on("restore_session", function(window) session_manager.restore_state(window) end)
 
@@ -31,7 +33,7 @@ local hue = math.random(1, 360);
 
 
 config.window_background_gradient = {
-    colors = {"hsl(0,0%,14.51%)"},
+    colors = {"hsl(1,0%,14.51%)"},
     blend = "Oklab",
     orientation = {
 	Radial = {
@@ -407,6 +409,15 @@ table.insert(
     }
   }
 );
+
+wezterm.on('update-right-status', function(window, pane)
+  window:set_right_status(window:active_workspace())
+end)
+
+config.enable_tab_bar = true;
+-- config.use_fancy_tab_bar = false;
+local MOD_TMUX_PROFILE = 'LEADER';
+local MOD_WEZ_PROFILE = 'CMD';
 -- Key bindings; a bit messy but pretty useful.
 -- + Some of them link to tmux actions such as navigation. Example: 
 --   "CMD+s" links to "<ctrl+a>e" (where ctrl+a is my tmux <leader>), which
@@ -421,7 +432,7 @@ config.leader = { key = 'a', mods = 'CMD', timeout_milliseconds = 1000 }
 config.keys = {
   {
     key = 's',
-    mods = 'CMD',
+    mods = MOD_TMUX_PROFILE,
     action = wezterm.action.Multiple {
       wezterm.action.SendKey { key = 'a', mods = 'CTRL' },
       -- wezterm.action.SendKey { key = 's' },
@@ -430,7 +441,7 @@ config.keys = {
   },
   {
     key = 'S',
-    mods = 'CMD',
+    mods = MOD_TMUX_PROFILE,
     action = wezterm.action.Multiple {
       wezterm.action.SendKey { key = 'a', mods = 'CTRL' },
       wezterm.action.SendKey { key = 's' },
@@ -438,32 +449,67 @@ config.keys = {
     },
   },
   {
+    key = 's',
+    mods = MOD_WEZ_PROFILE,
+    action = workspace_switcher.switch_workspace(),
+  },
+  {
+    key = 'S',
+    mods = MOD_WEZ_PROFILE,
+    action = workspace_switcher.switch_to_prev_workspace(),
+  },
+  {
     key = 'm',
-    mods = 'CMD',
+    mods = MOD_TMUX_PROFILE,
     action = wezterm.action.Multiple {
       wezterm.action.SendKey { key = 'a', mods = 'CTRL' },
       wezterm.action.SendKey { key = 'm' },
     },
   },
   {
+    key = 'm',
+    mods = MOD_WEZ_PROFILE,
+    action = wezterm.action.TogglePaneZoomState,
+  },
+  {
     key = 'DownArrow',
-    mods = 'CMD',
+    mods = MOD_TMUX_PROFILE,
     action = wezterm.action.Multiple {
       wezterm.action.SendKey { key = 'a', mods = 'CTRL' },
       wezterm.action.SendKey { key = 'DownArrow' }
     },
   },
   {
+    key = 'DownArrow',
+    mods = MOD_WEZ_PROFILE,
+    action = wezterm.action.ActivatePaneDirection 'Down',
+  },
+  {
     key = 'UpArrow',
-    mods = 'CMD',
+    mods = MOD_TMUX_PROFILE,
     action = wezterm.action.Multiple {
       wezterm.action.SendKey { key = 'a', mods = 'CTRL' },
       wezterm.action.SendKey { key = 'UpArrow' },
     },
   },
   {
+    key = 'UpArrow',
+    mods = MOD_WEZ_PROFILE,
+    action = wezterm.action.ActivatePaneDirection 'Up',
+  },
+  {
+    key = 'LeftArrow',
+    mods = MOD_WEZ_PROFILE,
+    action = wezterm.action.ActivatePaneDirection 'Left',
+  },
+  {
+    key = 'RightArrow',
+    mods = MOD_WEZ_PROFILE,
+    action = wezterm.action.ActivatePaneDirection 'Right',
+  },
+  {
     key = 'k',
-    mods = 'CMD',
+    mods = MOD_TMUX_PROFILE,
     action = wezterm.action.Multiple {
       wezterm.action.SendKey { key = 'a', mods = 'CTRL' },
       wezterm.action.SendKey { key = 'k' }
@@ -471,7 +517,7 @@ config.keys = {
   },
   {
     key = '7',
-    mods = 'CMD',
+    mods = MOD_TMUX_PROFILE,
     action = wezterm.action.Multiple {
       wezterm.action.SendKey { key = 'a', mods = 'CTRL' },
       wezterm.action.SendKey { key = '/' },
@@ -479,7 +525,7 @@ config.keys = {
   },
   {
     key = '/',
-    mods = 'CMD',
+    mods = MOD_TMUX_PROFILE,
     action = wezterm.action.Multiple {
       wezterm.action.SendKey { key = 'a', mods = 'CTRL' },
       wezterm.action.SendKey { key = '/' },
@@ -487,7 +533,16 @@ config.keys = {
   },
   {
     key = 'g',
-    mods = 'CMD',
+    mods = MOD_TMUX_PROFILE,
+    action = wezterm.action.Multiple {
+      wezterm.action.SendKey { key = ' ' },
+      wezterm.action.SendKey { key = 's' },
+      wezterm.action.SendKey { key = 'c' },
+    },
+  },
+  {
+    key = 'g',
+    mods = MOD_WEZ_PROFILE,
     action = wezterm.action.Multiple {
       wezterm.action.SendKey { key = ' ' },
       wezterm.action.SendKey { key = 's' },
@@ -496,7 +551,16 @@ config.keys = {
   },
   {
     key = 'e',
-    mods = 'CMD',
+    mods = MOD_TMUX_PROFILE,
+    action = wezterm.action.Multiple {
+      wezterm.action.SendKey { key = ' ' },
+      wezterm.action.SendKey { key = 'e' },
+      wezterm.action.SendKey { key = 'f' },
+    },
+  },
+  {
+    key = 'e',
+    mods = MOD_WEZ_PROFILE,
     action = wezterm.action.Multiple {
       wezterm.action.SendKey { key = ' ' },
       wezterm.action.SendKey { key = 'e' },
@@ -519,6 +583,105 @@ config.keys = {
         window_background_gradient = background.window_background_gradient,
       }
     end),
+  },
+  {
+    key = "v",
+    mods = MOD_WEZ_PROFILE,
+    action = wezterm.action.Multiple {
+      wezterm.action{EmitEvent = "save_session"},
+      wezterm.action_callback(function(win, pane)
+	  win:set_right_status('Session saved')
+      end)
+    },
+  },
+  {
+    key = "L",
+    mods = MOD_WEZ_PROFILE,
+    action = wezterm.action.Multiple {
+      wezterm.action{EmitEvent = "load_session"},
+      wezterm.action_callback(function(win, pane)
+	  win:set_right_status('Session loaded')
+      end)
+    },
+  },
+  {
+    key = "R",
+    mods = MOD_WEZ_PROFILE,
+    action = wezterm.action.Multiple {
+      wezterm.action{EmitEvent = "restore_session"},
+      wezterm.action_callback(function(win, pane)
+	  win:set_right_status('Session restored')
+      end)
+    },
+  },
+  {
+    key = "c",
+    mods = MOD_WEZ_PROFILE,
+    action = wezterm.action.Multiple {
+      wezterm.action_callback(function(win, pane)
+	  win:set_right_status('')
+      end)
+    },
+  },
+  {
+    key = 'w',
+    mods = MOD_WEZ_PROFILE,
+    action = wezterm.action.PromptInputLine {
+      description = wezterm.format {
+        { Attribute = { Intensity = 'Bold' } },
+        { Foreground = { AnsiColor = 'Fuchsia' } },
+        { Text = 'Enter name for new workspace' },
+      },
+      action = wezterm.action_callback(function(window, pane, line)
+        -- line will be `nil` if they hit escape without entering anything
+        -- An empty string if they just hit enter
+        -- Or the actual line of text they wrote
+        if line then
+          window:perform_action(
+            wezterm.action.SwitchToWorkspace {
+              name = line,
+            },
+            pane
+          )
+        end
+      end),
+    },
+  },
+  {
+    key = 'LeftArrow',
+    mods = 'ALT',
+    action = wezterm.action.SplitPane {
+      direction = 'Left',
+      -- command = { args = { 'top' } },
+      size = { Percent = 50 },
+    },
+  },
+  {
+    key = 'RightArrow',
+    mods = 'ALT',
+    action = wezterm.action.SplitPane {
+      direction = 'Right',
+      -- command = { args = { 'top' } },
+      size = { Percent = 50 },
+    },
+  },
+  {
+    key = 'DownArrow',
+    mods = 'ALT',
+    action = wezterm.action.SplitPane {
+      direction = 'Down',
+      -- command = { args = { 'top' } },
+      size = { Percent = 50 },
+    },
+  },
+  {
+    key = 'UpArrow',
+    mods = 'ALT',
+    action = wezterm.action.SplitPane {
+      direction = 'Up',
+      -- command = { args = { 'top' } },
+      size = { Percent = 50 },
+    },
   },
 }
 
