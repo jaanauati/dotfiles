@@ -299,6 +299,7 @@ let g:which_key_map['c']={
       \ 'r' : [':so ~/.config/nvim/init.vim', 'Reload nvim configs'],
       \ 't' : [':tabe ~/.tmux.conf', 'Edit .tmux.conf'],
       \ 'w' : [':tabe ~/.config/wezterm/wezterm.lua', 'Edit WezTerm conf'],
+      \ 'g' : [':tabe ~/.gitconfig', 'Edit .gitconfig'],
       \ 'n' : [':tabe ~/.npmrc', 'Edit .npmrc'],
       \ 'h' : [':tabe /etc/hosts', 'Edit hosts file']
       \ }

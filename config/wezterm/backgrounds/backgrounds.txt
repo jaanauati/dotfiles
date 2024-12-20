@@ -10,3 +10,5 @@
 10.png: Kylo
 11.png: Mooncake
 12.png: Avocato
+13.png: Gary Godspeed
+14.png: Squidward

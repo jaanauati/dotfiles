@@ -117,11 +117,11 @@ table.insert(
         source = {
             File = wezterm.config_dir .. "/backgrounds/3.png",
         },
-        vertical_align = "Bottom",
+        vertical_align = "Middle",
         horizontal_align = "Right",
         -- height = width*0.53
-        width = "550", 
-        height = "291.5",
+        width = 550, 
+        height = 550*0.53,
         repeat_x = "NoRepeat",
         repeat_y = "NoRepeat"
     },
@@ -208,7 +208,7 @@ table.insert(
         source = {
             File = wezterm.config_dir .. "/backgrounds/6.png",
         },
-        vertical_align = "Bottom",
+        vertical_align = "Middle",
         horizontal_align = "Right",
         -- height = width*1.515
         width = "350", 
@@ -410,12 +410,70 @@ table.insert(
   }
 );
 
+-- Gary Godspeed
+table.insert(
+  schemes,
+  {
+    background = {
+        source = {
+            File = wezterm.config_dir .. "/backgrounds/13.png",
+        },
+        vertical_align = "Bottom",
+        horizontal_align = "Right",
+        -- height = width*2.904
+        width = 250, 
+        height = 250*2.904,
+        repeat_x = "NoRepeat",
+        repeat_y = "NoRepeat",
+    },
+    window_background_gradient = {
+        colors = {onedark_dark_bg},
+        blend = "Oklab",
+        orientation = {
+            Radial = {
+                cx = 0.8,
+                cy = 0.8,
+                radius = 1.2,
+            }
+        },
+    }
+  }
+);
+
+-- Squidward 
+table.insert(
+  schemes,
+  {
+    background = {
+        source = {
+            File = wezterm.config_dir .. "/backgrounds/14.png",
+        },
+        vertical_align = "Bottom",
+        horizontal_align = "Right",
+        -- height = width*1.4
+        width = 400, 
+        height = 400*1.4,
+        repeat_x = "NoRepeat",
+        repeat_y = "NoRepeat",
+    },
+    window_background_gradient = {
+        colors = {onedark_dark_bg},
+        blend = "Oklab",
+        orientation = {
+            Radial = {
+                cx = 0.8,
+                cy = 0.8,
+                radius = 1.2,
+            }
+        },
+    }
+  }
+);
 wezterm.on('update-right-status', function(window, pane)
-  window:set_right_status(window:active_workspace())
+  window:set_right_status("[ " .. window:active_workspace() .. " ] ")
 end)
 
 config.enable_tab_bar = true;
--- config.use_fancy_tab_bar = false;
 local MOD_TMUX_PROFILE = 'LEADER';
 local MOD_WEZ_PROFILE = 'CMD';
 -- Key bindings; a bit messy but pretty useful.
@@ -646,6 +704,18 @@ config.keys = {
         end
       end),
     },
+  },
+   -- Attach to muxer
+  {
+    key = 'a',
+    mods = MOD_WEZ_PROFILE,
+    action = wezterm.action.AttachDomain 'unix',
+  },
+  -- Detach from muxer
+  {
+    key = 'd',
+    mods = MOD_WEZ_PROFILE,
+    action = wezterm.action.DetachDomain { DomainName = 'unix' },
   },
   {
     key = 'LeftArrow',
