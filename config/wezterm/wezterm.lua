@@ -14,7 +14,6 @@ wezterm.on("restore_session", function(window) session_manager.restore_state(win
 -- This will hold the configuration.
 local config = wezterm.config_builder()
 
-
 -- Session management.
 config.unix_domains = {
   {
@@ -26,11 +25,6 @@ config.max_fps = 241;
 
 -- For example, changing the color scheme:
 config.color_scheme = 'AdventureTime'
-
-math.randomseed(os.time())
-local hue = math.random(1, 360);
-
-
 
 config.window_background_gradient = {
     colors = {"hsl(1,0%,14.51%)"},
@@ -469,6 +463,7 @@ table.insert(
     }
   }
 );
+
 wezterm.on('update-right-status', function(window, pane)
   window:set_right_status("[ " .. window:active_workspace() .. " ] ")
 end)
@@ -682,6 +677,11 @@ config.keys = {
     },
   },
   {
+    key = 'p',
+    mods = MOD_WEZ_PROFILE,
+    action = wezterm.action.ShowLauncherArgs { flags = 'FUZZY|KEY_ASSIGNMENTS|COMMANDS|WORKSPACES|TABS|DOMAINS' }
+  },
+  {
     key = 'w',
     mods = MOD_WEZ_PROFILE,
     action = wezterm.action.PromptInputLine {
@@ -722,7 +722,6 @@ config.keys = {
     mods = 'ALT',
     action = wezterm.action.SplitPane {
       direction = 'Left',
-      -- command = { args = { 'top' } },
       size = { Percent = 50 },
     },
   },
@@ -731,7 +730,6 @@ config.keys = {
     mods = 'ALT',
     action = wezterm.action.SplitPane {
       direction = 'Right',
-      -- command = { args = { 'top' } },
       size = { Percent = 50 },
     },
   },
@@ -740,7 +738,6 @@ config.keys = {
     mods = 'ALT',
     action = wezterm.action.SplitPane {
       direction = 'Down',
-      -- command = { args = { 'top' } },
       size = { Percent = 50 },
     },
   },
@@ -749,7 +746,6 @@ config.keys = {
     mods = 'ALT',
     action = wezterm.action.SplitPane {
       direction = 'Up',
-      -- command = { args = { 'top' } },
       size = { Percent = 50 },
     },
   },
