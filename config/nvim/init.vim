@@ -4,22 +4,32 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive' 
+Plug 'tpope/vim-rhubarb'
 Plug 'shumphrey/fugitive-gitlab.vim'
 
 Plug 'easymotion/vim-easymotion'
+Plug 'folke/flash.nvim'
 Plug 'NeogitOrg/neogit'
 Plug 'liuchengxu/vim-which-key'
 " Plug 'nvim-neorg/neorg'
 Plug 'stevearc/oil.nvim'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'stevearc/dressing.nvim'
+Plug 'MunifTanjim/nui.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'BurntSushi/ripgrep'
 Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-file-browser.nvim'
+
+Plug 'hrsh7th/nvim-cmp'
+Plug 'HakonHarnes/img-clip.nvim'
+Plug 'zbirenbaum/copilot.lua'
 " Plug 'mhinz/vim-startify'
 " Plug 'airblade/vim-gitgutter'
 Plug 'lewis6991/gitsigns.nvim', {'branch': 'main'}
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 Plug 'averms/black-nvim', {'do': ':UpdateRemotePlugins'}
 Plug 'mhartington/oceanic-next'
 Plug 'stefandtw/quickfix-reflector.vim'
@@ -27,6 +37,7 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'nvim-tree/nvim-web-devicons' " optional, for file icons
 Plug 'nvim-tree/nvim-tree.lua'
 Plug 'xiyaowong/transparent.nvim', { 'branch': 'main' }
+Plug 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make' }
 
 Plug 'kana/vim-textobj-user'
 Plug 'bps/vim-textobj-python'
@@ -59,7 +70,7 @@ set shiftwidth=2
 set softtabstop=2
 " system clipboard default.
 set clipboard=unnamedplus
-set colorcolumn=79,100,120
+set colorcolumn=79
 highlight ColorColumn guibg=Black
 set mouse=a
 
@@ -222,7 +233,9 @@ let g:which_key_map['s']={
       \ 's' : [':call SearchVimgrep()','Search using vimgrep'],
       \ 'c' : [':call SearchCoc()','Search using coc'],
       \ 'y' : [':call SearchSymbolCoc()','Search symbol using coc'],
-      \ 'p' : [':Telescope git_files', 'Open file using Telescope'],
+      \ 'f' : [':Telescope git_files', 'Open file using Telescope'],
+      \ 'p' : [':CocList outline', 'Symbols in current buffer'],
+      \ 'P' : [':CocList symbols', 'Symbols in project'],
       \ 'd' : [':Telescope git_files', 'Open file using Telescope']
       \ }
 
@@ -258,8 +271,10 @@ let g:which_key_map['f']={
       \ 'o' : ['NvimTreeOpen', 'Open Explorer'],
       \ 'c' : ['NvimTreeClose', 'Close Explorer'],
       \ 'r' : ['NvimTreeFindFile', 'Reveal File in Explorer'],
+      \ 'R' : [':Telescope file_browser path=%:p:h select_buffer=true','Reveal file in Telescope explorer'],
       \ 't' : ['NvimTreeFindFileToggle', 'Reveal File in Explorer'],
       \ 'p' : ['CopyFullPath', 'Copy File Path'],
+      \ 'O' : [':!open %', 'Open file with system tool'],
       \ }
 
 let g:which_key_map['w'] = {
@@ -299,6 +314,7 @@ let g:which_key_map['c']={
       \ 'r' : [':so ~/.config/nvim/init.vim', 'Reload nvim configs'],
       \ 't' : [':tabe ~/.tmux.conf', 'Edit .tmux.conf'],
       \ 'w' : [':tabe ~/.config/wezterm/wezterm.lua', 'Edit WezTerm conf'],
+      \ 'g' : [':tabe ~/.gitconfig', 'Edit .gitconfig'],
       \ 'n' : [':tabe ~/.npmrc', 'Edit .npmrc'],
       \ 'h' : [':tabe /etc/hosts', 'Edit hosts file']
       \ }
@@ -348,6 +364,7 @@ colorscheme onedark
 " disable folding in telescope's result window
 autocmd! FileType TelescopeResults setlocal nofoldenable
 
+autocmd! User avante.nvim lua << EOF
 lua << EOF
 require'neogit'.setup()
 require'telescope'.setup({
@@ -371,8 +388,52 @@ require'nvim-treesitter.configs'.setup {
     "html",
     "json",
     "json5",
-    "sql"
-  }
+    "sql",
+    "rust",
+    "typescript"
+  },
+  textobjects = {
+    select = {
+      enable = true,
+
+      -- Automatically jump forward to textobj, similar to targets.vim
+      lookahead = true,
+
+      keymaps = {
+        -- You can use the capture groups defined in textobjects.scm
+        ["af"] = "@function.outer",
+        ["if"] = "@function.inner",
+        ["ac"] = "@class.outer",
+        -- You can optionally set descriptions to the mappings (used in the desc parameter of
+        -- nvim_buf_set_keymap) which plugins like which-key display
+        ["ic"] = { query = "@class.inner", desc = "Select inner part of a class region" },
+        -- You can also use captures from other query groups like `locals.scm`
+        ["as"] = { query = "@local.scope", query_group = "locals", desc = "Select language scope" },
+      },
+      -- You can choose the select mode (default is charwise 'v')
+      --
+      -- Can also be a function which gets passed a table with the keys
+      -- * query_string: eg '@function.inner'
+      -- * method: eg 'v' or 'o'
+      -- and should return the mode ('v', 'V', or '<c-v>') or a table
+      -- mapping query_strings to modes.
+      selection_modes = {
+        ['@parameter.outer'] = 'v', -- charwise
+        ['@function.outer'] = 'V', -- linewise
+        ['@class.outer'] = '<c-v>', -- blockwise
+      },
+      -- If you set this to `true` (default is `false`) then any textobject is
+      -- extended to include preceding or succeeding whitespace. Succeeding
+      -- whitespace has priority in order to act similarly to eg the built-in
+      -- `ap`.
+      --
+      -- Can also be a function which gets passed a table with the keys
+      -- * query_string: eg '@function.inner'
+      -- * selection_mode: eg 'v'
+      -- and should return true or false
+      include_surrounding_whitespace = true,
+    },
+  },
 }
 require'gitsigns'.setup()
 require'nvim-tree'.setup()
@@ -419,5 +480,48 @@ require('lualine').setup({
 })
 
 require("oil").setup()
+require('avante_lib').load()
+require('avante').setup({
+  provider = "gemini", -- Recommend using Claude
+  -- auto_suggestions_provider = "copilot", -- Since auto-suggestions are a high-frequency operation and therefore expensive, it is recommended to specify an inexpensive provider or even a free provider: copilot
+  behaviour = {
+    auto_suggestions = false, -- Experimental stage
+    auto_set_highlight_group = true,
+    auto_set_keymaps = true,
+    auto_apply_diff_after_generation = false,
+    support_paste_from_clipboard = false,
+  },
+  gemini = {
+    -- @see https://ai.google.dev/gemini-api/docs/models/gemini
+    model = "gemini-2.0-flash-exp",
+    -- model = "gemini-1.5-flash",
+    temperature = 0,
+    max_tokens = 4096,
+  },
+})
+vim.opt.laststatus = 3
 EOF
+lua << EOF
+    require('flash').setup({
+        search = {
+            mode = function(str)
+              return "\\<" .. str
+            end
+        },
+        jump = {
+            autojump = true,
+        },
+        label = {
+            rainbow = {
+              enabled = true,
+              shade = 9,
+            }
+        }
+    })
 
+
+    vim.keymap.set({"n","o","x"},"j", function() require("flash").jump() end, {desc="Flash"})
+    vim.keymap.set({"o"},"r", function() require("flash").remote() end, {desc="Flash Remote"})
+    vim.keymap.set({"i"}, "<C-j>", function() require("flash").jump() end, {desc="Flash"})
+
+EOF

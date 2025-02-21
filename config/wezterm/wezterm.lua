@@ -1,21 +1,34 @@
 -- Pull in the wezterm API
+--
 local wezterm = require 'wezterm'
+
+local workspace_switcher = wezterm.plugin.require("https://github.com/MLFlexer/smart_workspace_switcher.wezterm")
+
+local session_manager = require("wezterm-session-manager/session-manager")
+wezterm.on("save_session", function(window) 
+  session_manager.save_state(window)
+end)
+wezterm.on("load_session", function(window) session_manager.load_state(window) end)
+wezterm.on("restore_session", function(window) session_manager.restore_state(window) end)
+
 
 -- This will hold the configuration.
 local config = wezterm.config_builder()
 
-config.max_fps = 240;
+-- Session management.
+config.unix_domains = {
+  {
+    name = "unix";
+  },
+}
+
+config.max_fps = 255;
 
 -- For example, changing the color scheme:
 config.color_scheme = 'AdventureTime'
 
-math.randomseed(os.time())
-local hue = math.random(1, 360);
-
-
-
 config.window_background_gradient = {
-    colors = {"hsl(0,0%,14.51%)"},
+    colors = {"hsl(1,0%,14.51%)"},
     blend = "Oklab",
     orientation = {
 	Radial = {
@@ -41,7 +54,6 @@ table.insert(
         },
         vertical_align = "Bottom",
         horizontal_align = "Right",
-        -- height = width*1.372
         width = "550", 
         height = "754.6",
         repeat_x = "NoRepeat",
@@ -69,7 +81,7 @@ table.insert(
         source = {
             File = wezterm.config_dir .. "/backgrounds/2.png",
         },
-        vertical_align = "Bottom",
+        vertical_align = "Middle",
         horizontal_align = "Right",
         -- height = width*0,931
         width = "550", 
@@ -99,11 +111,11 @@ table.insert(
         source = {
             File = wezterm.config_dir .. "/backgrounds/3.png",
         },
-        vertical_align = "Bottom",
+        vertical_align = "Middle",
         horizontal_align = "Right",
         -- height = width*0.53
-        width = "550", 
-        height = "291.5",
+        width = 550, 
+        height = 550*0.53,
         repeat_x = "NoRepeat",
         repeat_y = "NoRepeat"
     },
@@ -190,7 +202,7 @@ table.insert(
         source = {
             File = wezterm.config_dir .. "/backgrounds/6.png",
         },
-        vertical_align = "Bottom",
+        vertical_align = "Middle",
         horizontal_align = "Right",
         -- height = width*1.515
         width = "350", 
@@ -332,6 +344,133 @@ table.insert(
   }
 );
 
+-- Mooncake
+table.insert(
+  schemes,
+  {
+    background = {
+        source = {
+            File = wezterm.config_dir .. "/backgrounds/11.png",
+        },
+        vertical_align = "Middle",
+        horizontal_align = "Right",
+        -- height = width*1.056
+        width = "500", 
+        height = "528",
+        repeat_x = "NoRepeat",
+        repeat_y = "NoRepeat",
+    },
+    window_background_gradient = {
+        colors = {onedark_dark_bg},
+        blend = "Oklab",
+        orientation = {
+            Radial = {
+                cx = 0.8,
+                cy = 0.8,
+                radius = 1.2,
+            }
+        },
+    }
+  }
+);
+
+-- Avocato
+table.insert(
+  schemes,
+  {
+    background = {
+        source = {
+            File = wezterm.config_dir .. "/backgrounds/12.png",
+        },
+        vertical_align = "Bottom",
+        horizontal_align = "Right",
+        -- height = width*2.062
+        width = "300", 
+        height = "618",
+        repeat_x = "NoRepeat",
+        repeat_y = "NoRepeat",
+    },
+    window_background_gradient = {
+        colors = {onedark_dark_bg},
+        blend = "Oklab",
+        orientation = {
+            Radial = {
+                cx = 0.8,
+                cy = 0.8,
+                radius = 1.2,
+            }
+        },
+    }
+  }
+);
+
+-- Gary Godspeed
+table.insert(
+  schemes,
+  {
+    background = {
+        source = {
+            File = wezterm.config_dir .. "/backgrounds/13.png",
+        },
+        vertical_align = "Bottom",
+        horizontal_align = "Right",
+        -- height = width*2.904
+        width = 250, 
+        height = 250*2.904,
+        repeat_x = "NoRepeat",
+        repeat_y = "NoRepeat",
+    },
+    window_background_gradient = {
+        colors = {onedark_dark_bg},
+        blend = "Oklab",
+        orientation = {
+            Radial = {
+                cx = 0.8,
+                cy = 0.8,
+                radius = 1.2,
+            }
+        },
+    }
+  }
+);
+
+-- Squidward 
+table.insert(
+  schemes,
+  {
+    background = {
+        source = {
+            File = wezterm.config_dir .. "/backgrounds/14.png",
+        },
+        vertical_align = "Bottom",
+        horizontal_align = "Right",
+        -- height = width*1.4
+        width = 400, 
+        height = 400*1.4,
+        repeat_x = "NoRepeat",
+        repeat_y = "NoRepeat",
+    },
+    window_background_gradient = {
+        colors = {onedark_dark_bg},
+        blend = "Oklab",
+        orientation = {
+            Radial = {
+                cx = 0.8,
+                cy = 0.8,
+                radius = 1.2,
+            }
+        },
+    }
+  }
+);
+
+wezterm.on('update-right-status', function(window, pane)
+  window:set_right_status("[ " .. window:active_workspace() .. " ] ")
+end)
+
+config.enable_tab_bar = true;
+local MOD_TMUX_PROFILE = 'CMD';
+local MOD_WEZ_PROFILE = 'LEADER';
 -- Key bindings; a bit messy but pretty useful.
 -- + Some of them link to tmux actions such as navigation. Example: 
 --   "CMD+s" links to "<ctrl+a>e" (where ctrl+a is my tmux <leader>), which
@@ -342,10 +481,11 @@ table.insert(
 --    "CocSearch" command.
 -- + There are also some bindings for switching terminal backgrounds
 --    (list of images under "backgrounds" directory).
+config.leader = { key = 'a', mods = 'CMD', timeout_milliseconds = 1000 }
 config.keys = {
   {
     key = 's',
-    mods = 'CMD',
+    mods = MOD_TMUX_PROFILE,
     action = wezterm.action.Multiple {
       wezterm.action.SendKey { key = 'a', mods = 'CTRL' },
       -- wezterm.action.SendKey { key = 's' },
@@ -354,7 +494,7 @@ config.keys = {
   },
   {
     key = 'S',
-    mods = 'CMD',
+    mods = MOD_TMUX_PROFILE,
     action = wezterm.action.Multiple {
       wezterm.action.SendKey { key = 'a', mods = 'CTRL' },
       wezterm.action.SendKey { key = 's' },
@@ -362,32 +502,67 @@ config.keys = {
     },
   },
   {
+    key = 's',
+    mods = MOD_WEZ_PROFILE,
+    action = workspace_switcher.switch_workspace(),
+  },
+  {
+    key = 'S',
+    mods = MOD_WEZ_PROFILE,
+    action = workspace_switcher.switch_to_prev_workspace(),
+  },
+  {
     key = 'm',
-    mods = 'CMD',
+    mods = MOD_TMUX_PROFILE,
     action = wezterm.action.Multiple {
       wezterm.action.SendKey { key = 'a', mods = 'CTRL' },
       wezterm.action.SendKey { key = 'm' },
     },
   },
   {
+    key = 'm',
+    mods = MOD_WEZ_PROFILE,
+    action = wezterm.action.TogglePaneZoomState,
+  },
+  {
     key = 'DownArrow',
-    mods = 'CMD',
+    mods = MOD_TMUX_PROFILE,
     action = wezterm.action.Multiple {
       wezterm.action.SendKey { key = 'a', mods = 'CTRL' },
       wezterm.action.SendKey { key = 'DownArrow' }
     },
   },
   {
+    key = 'DownArrow',
+    mods = MOD_WEZ_PROFILE,
+    action = wezterm.action.ActivatePaneDirection 'Down',
+  },
+  {
     key = 'UpArrow',
-    mods = 'CMD',
+    mods = MOD_TMUX_PROFILE,
     action = wezterm.action.Multiple {
       wezterm.action.SendKey { key = 'a', mods = 'CTRL' },
       wezterm.action.SendKey { key = 'UpArrow' },
     },
   },
   {
+    key = 'UpArrow',
+    mods = MOD_WEZ_PROFILE,
+    action = wezterm.action.ActivatePaneDirection 'Up',
+  },
+  {
+    key = 'LeftArrow',
+    mods = MOD_WEZ_PROFILE,
+    action = wezterm.action.ActivatePaneDirection 'Left',
+  },
+  {
+    key = 'RightArrow',
+    mods = MOD_WEZ_PROFILE,
+    action = wezterm.action.ActivatePaneDirection 'Right',
+  },
+  {
     key = 'k',
-    mods = 'CMD',
+    mods = MOD_TMUX_PROFILE,
     action = wezterm.action.Multiple {
       wezterm.action.SendKey { key = 'a', mods = 'CTRL' },
       wezterm.action.SendKey { key = 'k' }
@@ -395,7 +570,7 @@ config.keys = {
   },
   {
     key = '7',
-    mods = 'CMD',
+    mods = MOD_TMUX_PROFILE,
     action = wezterm.action.Multiple {
       wezterm.action.SendKey { key = 'a', mods = 'CTRL' },
       wezterm.action.SendKey { key = '/' },
@@ -403,7 +578,7 @@ config.keys = {
   },
   {
     key = '/',
-    mods = 'CMD',
+    mods = MOD_TMUX_PROFILE,
     action = wezterm.action.Multiple {
       wezterm.action.SendKey { key = 'a', mods = 'CTRL' },
       wezterm.action.SendKey { key = '/' },
@@ -411,7 +586,26 @@ config.keys = {
   },
   {
     key = 'g',
-    mods = 'CMD',
+    mods = MOD_TMUX_PROFILE,
+    action = wezterm.action.Multiple {
+      wezterm.action.SendKey { key = ' ' },
+      wezterm.action.SendKey { key = 's' },
+      wezterm.action.SendKey { key = 'c' },
+    },
+  },
+  -- map to search symbol using coc.
+  {
+    key = 'p',
+    mods = MOD_TMUX_PROFILE,
+    action = wezterm.action.Multiple {
+      wezterm.action.SendKey { key = ' ' },
+      wezterm.action.SendKey { key = 's' },
+      wezterm.action.SendKey { key = 'p' },
+    },
+  },
+  {
+    key = 'g',
+    mods = MOD_WEZ_PROFILE,
     action = wezterm.action.Multiple {
       wezterm.action.SendKey { key = ' ' },
       wezterm.action.SendKey { key = 's' },
@@ -420,7 +614,16 @@ config.keys = {
   },
   {
     key = 'e',
-    mods = 'CMD',
+    mods = MOD_TMUX_PROFILE,
+    action = wezterm.action.Multiple {
+      wezterm.action.SendKey { key = ' ' },
+      wezterm.action.SendKey { key = 'e' },
+      wezterm.action.SendKey { key = 'f' },
+    },
+  },
+  {
+    key = 'e',
+    mods = MOD_WEZ_PROFILE,
     action = wezterm.action.Multiple {
       wezterm.action.SendKey { key = ' ' },
       wezterm.action.SendKey { key = 'e' },
@@ -444,6 +647,121 @@ config.keys = {
       }
     end),
   },
+  {
+    key = "v",
+    mods = MOD_WEZ_PROFILE,
+    action = wezterm.action.Multiple {
+      wezterm.action{EmitEvent = "save_session"},
+      wezterm.action_callback(function(win, pane)
+	  win:set_right_status('Session saved')
+      end)
+    },
+  },
+  {
+    key = "L",
+    mods = MOD_WEZ_PROFILE,
+    action = wezterm.action.Multiple {
+      wezterm.action{EmitEvent = "load_session"},
+      wezterm.action_callback(function(win, pane)
+	  win:set_right_status('Session loaded')
+      end)
+    },
+  },
+  {
+    key = "R",
+    mods = MOD_WEZ_PROFILE,
+    action = wezterm.action.Multiple {
+      wezterm.action{EmitEvent = "restore_session"},
+      wezterm.action_callback(function(win, pane)
+	  win:set_right_status('Session restored')
+      end)
+    },
+  },
+  {
+    key = "c",
+    mods = MOD_WEZ_PROFILE,
+    action = wezterm.action.Multiple {
+      wezterm.action_callback(function(win, pane)
+	  win:set_right_status('')
+      end)
+    },
+  },
+  {
+    key = 'p',
+    mods = MOD_WEZ_PROFILE,
+    action = wezterm.action.ShowLauncherArgs { flags = 'FUZZY|KEY_ASSIGNMENTS|COMMANDS|WORKSPACES|TABS|DOMAINS' }
+  },
+  {
+    key = 'w',
+    mods = MOD_WEZ_PROFILE,
+    action = wezterm.action.PromptInputLine {
+      description = wezterm.format {
+        { Attribute = { Intensity = 'Bold' } },
+        { Foreground = { AnsiColor = 'Fuchsia' } },
+        { Text = 'Enter name for new workspace' },
+      },
+      action = wezterm.action_callback(function(window, pane, line)
+        -- line will be `nil` if they hit escape without entering anything
+        -- An empty string if they just hit enter
+        -- Or the actual line of text they wrote
+        if line then
+          window:perform_action(
+            wezterm.action.SwitchToWorkspace {
+              name = line,
+            },
+            pane
+          )
+        end
+      end),
+    },
+  },
+   -- Attach to muxer
+  {
+    key = 'a',
+    mods = MOD_WEZ_PROFILE,
+    action = wezterm.action.AttachDomain 'unix',
+  },
+  -- Detach from muxer
+  {
+    key = 'd',
+    mods = MOD_WEZ_PROFILE,
+    action = wezterm.action.DetachDomain { DomainName = 'unix' },
+  },
+  {
+    key = 'LeftArrow',
+    mods = 'ALT',
+    action = wezterm.action.SplitPane {
+      direction = 'Left',
+      size = { Percent = 50 },
+    },
+  },
+  {
+    key = 'RightArrow',
+    mods = 'ALT',
+    action = wezterm.action.SplitPane {
+      direction = 'Right',
+      size = { Percent = 50 },
+    },
+  },
+  {
+    key = 'DownArrow',
+    mods = 'ALT',
+    action = wezterm.action.SplitPane {
+      direction = 'Down',
+      size = { Percent = 50 },
+    },
+  },
+  {
+    key = 'UpArrow',
+    mods = 'ALT',
+    action = wezterm.action.SplitPane {
+      direction = 'Up',
+      size = { Percent = 50 },
+    },
+  },
 }
 
+workspace_switcher.apply_to_config(config)
+
 return config
+
