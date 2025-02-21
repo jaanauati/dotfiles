@@ -1,4 +1,5 @@
 -- Pull in the wezterm API
+--
 local wezterm = require 'wezterm'
 
 local workspace_switcher = wezterm.plugin.require("https://github.com/MLFlexer/smart_workspace_switcher.wezterm")
@@ -21,7 +22,7 @@ config.unix_domains = {
   },
 }
 
-config.max_fps = 241;
+config.max_fps = 255;
 
 -- For example, changing the color scheme:
 config.color_scheme = 'AdventureTime'
@@ -53,7 +54,6 @@ table.insert(
         },
         vertical_align = "Bottom",
         horizontal_align = "Right",
-        -- height = width*1.372
         width = "550", 
         height = "754.6",
         repeat_x = "NoRepeat",
@@ -469,8 +469,8 @@ wezterm.on('update-right-status', function(window, pane)
 end)
 
 config.enable_tab_bar = true;
-local MOD_TMUX_PROFILE = 'LEADER';
-local MOD_WEZ_PROFILE = 'CMD';
+local MOD_TMUX_PROFILE = 'CMD';
+local MOD_WEZ_PROFILE = 'LEADER';
 -- Key bindings; a bit messy but pretty useful.
 -- + Some of them link to tmux actions such as navigation. Example: 
 --   "CMD+s" links to "<ctrl+a>e" (where ctrl+a is my tmux <leader>), which
@@ -591,6 +591,16 @@ config.keys = {
       wezterm.action.SendKey { key = ' ' },
       wezterm.action.SendKey { key = 's' },
       wezterm.action.SendKey { key = 'c' },
+    },
+  },
+  -- map to search symbol using coc.
+  {
+    key = 'p',
+    mods = MOD_TMUX_PROFILE,
+    action = wezterm.action.Multiple {
+      wezterm.action.SendKey { key = ' ' },
+      wezterm.action.SendKey { key = 's' },
+      wezterm.action.SendKey { key = 'p' },
     },
   },
   {
