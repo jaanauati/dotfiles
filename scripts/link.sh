@@ -13,6 +13,10 @@ ln -s -v $DOTFILES_ROOT/config/nvim/init.vim ~/.config/nvim/init.vim
 ln -s -v $DOTFILES_ROOT/config/nvim/macmap.vim ~/.config/nvim/macmap.vim
 
 
+ln -s -v $DOTFILES_ROOT/config/coc/memos.json ~/.config/coc/memos.json
+ln -s -v $DOTFILES_ROOT/config/coc/extensions/package.json ~/.config/coc/extensions/package.json
+
+
 # install external deps
 git clone https://github.com/danielcopper/wezterm-session-manager.git ~/.config/wezterm/wezterm-session-manager
 
